@@ -2,16 +2,20 @@
 
 import io
 import json
+import configparser
 from influxdb import InfluxDBClient
 import logging
 import asyncio
 
 def make_stdout_handler():
 
+    conf = configparser.ConfigParser()
+    conf.read('sensors2influx.ini')
+
     influx = InfluxDBClient(
-        host='bugenhagen',
-        port=8086,
-        database='house'
+        host=conf['sensors2influx']['influxdb_host'],
+        port=conf['sensors2influx']['influxdb_port'],
+        database=conf['sensors2influx']['influxdb_database']
     )
 
     def real_stdout_handler(line):
